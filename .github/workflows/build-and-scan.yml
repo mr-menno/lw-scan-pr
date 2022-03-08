@@ -6,7 +6,7 @@ on:
 #      - main
 
 jobs:
-  build-and-scan
+  build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
