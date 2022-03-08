@@ -58,7 +58,7 @@ jobs:
         ${{ steps.meta.outputs.tags}}
         ${{ env.REGISTRY }}
         EOF
-        ./lw-scanner image evaluate image_name image_tag --build-id ${{ github.run_id }}
+        ./lw-scanner image evaluate $(${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }}
 
     # - name: Build and push Docker image
     #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
