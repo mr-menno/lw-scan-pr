@@ -9,6 +9,10 @@ jobs:
   build-and-scan:
     runs-on: ubuntu-latest
 
+    env:
+      LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
+      LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -33,6 +37,27 @@ jobs:
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
       with:
         context: .
-        push: true
+        load: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+    - name: scan
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install curl
+          curl -L https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
+          chmod +x lw-scanner
+          cat <<EOF
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          EOF
+          ./lw-scanner image evaluate image_name image_tag --build-id ${{ github.run_id }}
+
+    # - name: Build and push Docker image
+    #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }}
