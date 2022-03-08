@@ -50,15 +50,7 @@ jobs:
         sudo apt-get -y install curl
         curl -L https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
         chmod +x lw-scanner
-        cat <<EOF
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        ${{ steps.meta.outputs.json }}
-        ${{ env.IMAGE_NAME }}
-        ${{ steps.meta.outputs.tags}}
-        ${{ env.REGISTRY }}
-        EOF
-        ./lw-scanner image evaluate $(${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }}
+        echo "./lw-scanner image evaluate $(${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }}"
 
     # - name: Build and push Docker image
     #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
