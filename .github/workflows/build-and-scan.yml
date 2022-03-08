@@ -53,6 +53,10 @@ jobs:
         cat <<EOF
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        ${{ steps.meta.outputs.json }}
+        ${{ env.IMAGE_NAME }}
+        ${{ steps.meta.outputs.tags}}
+        ${{ env.REGISTRY }}
         EOF
         ./lw-scanner image evaluate image_name image_tag --build-id ${{ github.run_id }}
 
