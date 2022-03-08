@@ -12,6 +12,8 @@ jobs:
     env:
       LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
       LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
     - name: Checkout
@@ -31,7 +33,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: ghcr.io/${{ env.GITHUB_REPOSITORY }}/test-image
+        images: ghcr.io/${{ env.IMAGE_NAME }}/test-image
 
     - name: Build and push Docker image
       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
