@@ -21,4 +21,4 @@ jobs:
       with:
         registry: ghcr.io
         username: mr-menno
-        password: ${{ GITHUB_TOKEN }}
+        password: ${{ github.GITHUB_TOKEN }}
