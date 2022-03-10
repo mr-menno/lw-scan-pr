@@ -23,15 +23,13 @@ runs:
       with:
         name: lacework-scan-results
         path: lw-scan-result.*
-    - run: npm install execa
-      shell: bash
     - uses: actions/github-script@v6
       with:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
           //console.log(context);
-          const policy = require('policy.js');
+          const policy = require('./policy.js');
           let message = policy.result(github);
           
           await github.rest.issues.createComment({
