@@ -1,4 +1,6 @@
 #!/bin/sh
+which docker
+docker ps
 IMAGE=$(echo $1 | cut -f1 -d:)
 TAG=$(echo $1 | cut -f2 -d:)
 echo "Scanning:"
