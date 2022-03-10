@@ -31,15 +31,12 @@ runs:
           //const core = require('@actions/core');
           //const github = require('@actions/github');
           //console.log(context);
-
-          const fs = require('fs');
-          let file = fs.readFileSync('lw-scan-result.json');
-          console.log(file);
-          let results = JSON.parse(file);
-          console.log(results);
+          const policy = require('policy.js');
+          let message = policy.result(github);
+          
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Welcome, new contributor!'
+              body: message
           })
