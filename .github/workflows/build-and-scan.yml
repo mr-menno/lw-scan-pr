@@ -1,9 +1,7 @@
+#Sample workflow
 name: Build and Scan
 
 on:
-#  push:
-#    branches:
-#      - main
   pull_request:
     
 
@@ -20,9 +18,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v1
  
     - name: Login to Container Registry
       uses: docker/login-action@v1
@@ -41,30 +36,8 @@ jobs:
       id: build
       run: docker build -t ${{ steps.meta.outputs.tags }} .
 
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-    #   with:
-    #     context: .
-    #     load: true
-    #     tags: ${{ steps.meta.outputs.tags }}
-    #     labels: ${{ steps.meta.outputs.labels }}
-
-    # - name: scan
-    #   shell: bash
-    #   run: |
-    #     curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
-    #     chmod +x lw-scanner
-    #     ./lw-scanner image evaluate $(echo ${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }} --policy --fail-on-violation-exit-code 1 -q -v=false
-
     - name: Lacework Scanner
       id: lacework
       uses: ./
       with:
         tags: ${{ steps.meta.outputs.tags }}
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-    #   with:
-    #     context: .
-    #     push: true
-    #     tags: ${{ steps.meta.outputs.tags }}
-    #     labels: ${{ steps.meta.outputs.labels }}
