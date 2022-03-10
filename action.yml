@@ -30,11 +30,12 @@ runs:
           //const github = require('@actions/github');
           //console.log(context);
           const policy = require('./policy.js');
-          let message = policy.result(github);
+          let policy_result = policy.result(github);
           
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: message
+              body: policy_result.message
           })
+          process.exit(policy_result.code)
