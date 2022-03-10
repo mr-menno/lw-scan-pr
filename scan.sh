@@ -6,4 +6,4 @@ echo "  image=$IMAGE"
 echo "  tag=$TAG"
 ./lw-scanner evaluate $IMAGE $TAG --policy -v=false --html --html-file lw-scan-result.html > lw-scan-results.json
 ls
-jq '.' lw-scan-results.json
+# jq '.' lw-scan-results.json
