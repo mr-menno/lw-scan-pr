@@ -19,14 +19,18 @@ runs:
       shell: bash
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
+    - run: npm install execa
     - uses: actions/github-script@v6
       with:
         script: |
+          const core = require('@actions/core');
+          const github = require('@actions/github');
           //console.log(context);
-          //const exec = require('child_process');
-          console.log(exec.execSync('ls').toString());
-          console.log(exec.execSync('pwd').toString());
 
+          const execa = require('execa')
+          const { stdout } = await execa('echo', ['hello', 'world'])
+          console.log(stdout)
+          
           const fs = require('fs');
           results = JSON.parse(fs.readFileSync('lw-scan-results.json'));
           console.log(results);
