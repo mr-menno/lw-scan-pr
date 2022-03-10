@@ -2,7 +2,7 @@ name: 'Hello World'
 description: 'Scan Image'
 inputs:
   tags:  # id of input
-    description: 'Who to greet'
+    description: 'image repo and tags'
     required: true
     default: ''
 outputs:
@@ -12,11 +12,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: download-lw-scanner
-      run: |
-        curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
-        chmod +x lw-scanner
-      shell: bash
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
     - uses: actions/upload-artifact@v3
