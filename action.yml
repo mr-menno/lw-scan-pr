@@ -19,6 +19,12 @@ runs:
       shell: bash
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results
+        path: |
+          lw-scan-result.json
+          lw-scan-result.html
     - run: npm install execa
       shell: bash
     - uses: actions/github-script@v6
@@ -33,7 +39,7 @@ runs:
           console.log(stdout)
           
           const fs = require('fs');
-          results = JSON.parse(fs.readFileSync('lw-scan-results.json'));
+          results = JSON.parse(fs.readFileSync('lw-scan-result.json'));
           console.log(results);
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
