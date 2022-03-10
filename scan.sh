@@ -4,5 +4,5 @@ TAG=$(echo $1 | cut -f2 -d:)
 echo "Scanning:"
 echo "  image=$IMAGE"
 echo "  tag=$TAG"
-echo $LW_ACCESS_TOKEN
-./lw-scanner --help
+echo $GITHUB_PATH
+./lw-scanner evaluate $IMAGE $TAG --policy --fail-on-violation-exit-code 1 -v=false > lw-scan-results.json
