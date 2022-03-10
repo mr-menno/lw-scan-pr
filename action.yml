@@ -1,16 +1,25 @@
-# action.yml
 name: 'Hello World'
-description: 'Greet someone and record the time'
+description: 'Scan Image'
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'
     required: true
     default: 'World'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
-  using: 'docker'
-  image: ubuntu:latest
-  args:
-    - ${{ inputs.who-to-greet }}
+  using: "composite"
+  steps:
+    - run: |
+        curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
+        chmod +x lw-scanner
+      shell: bash
+    - id: random-number-generator
+      run: echo "::set-output name=random-id::$(echo $RANDOM)"
+      shell: bash
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash          
+    - run: goodbye.sh
+      shell: bash
