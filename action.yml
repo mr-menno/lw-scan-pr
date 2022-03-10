@@ -20,6 +20,7 @@ runs:
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
     - run: npm install execa
+      shell: bash
     - uses: actions/github-script@v6
       with:
         script: |
