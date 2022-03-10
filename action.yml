@@ -32,12 +32,10 @@ runs:
           //const github = require('@actions/github');
           //console.log(context);
 
-          const execa = require('execa')
-          const { stdout } = await execa('echo', ['hello', 'world'])
-          console.log(stdout)
-          
           const fs = require('fs');
-          results = JSON.parse(fs.readFileSync('lw-scan-result.json'));
+          let file = fs.readFileSync('lw-scan-result.json');
+          console.log(file);
+          let results = JSON.parse(file);
           console.log(results);
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
