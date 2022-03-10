@@ -1,0 +1,36 @@
+name: 'Hello World'
+description: 'Scan Image'
+inputs:
+  tags:  # id of input
+    description: 'image repo and tags'
+    required: true
+    default: ''
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - run: ./scan.sh ${{ inputs.tags }}
+      shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results
+        path: lw-scan-result.*
+    - uses: actions/github-script@v6
+      with:
+        script: |
+          //const core = require('@actions/core');
+          //const github = require('@actions/github');
+          //console.log(context);
+          const policy = require('./policy.js');
+          let policy_result = policy.result(github);
+          
+          await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: policy_result.message
+          })
+          process.exit(policy_result.code)
