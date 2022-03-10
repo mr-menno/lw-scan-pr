@@ -15,13 +15,17 @@ policy.result = (github) => {
     low: {found:0, fixable:0},
     info: {found:0, fixable:0}
   }
+  let vulnFixable = [];
   results.cve.image.image_layers.filter(l=>l.packages.length>0).forEach(layer => {
     layer.packages.forEach(package => {
       package.vulnerabilities.forEach(vulnerability => {
         console.log(vulnerability);
         if(vulnerability.status=='VULNERABLE') {
           vulnCount[vulnerability.severity.toLowerCase()].found++;
-          if(vulnerability.fix_version) vulnCount[vulnerability.severity.toLowerCase()].fixable++;
+          if(vulnerability.fix_version) { 
+            vulnCount[vulnerability.severity.toLowerCase()].fixable++;
+            vulnFixable.push(vulnerability);
+          }
         }
       })
     })
@@ -42,6 +46,24 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
 | Info | ${vulnCount.info.found} | ${vulnCount.info.fixable} |
 `;
 
+  if(vulnFixable.length>0) {
+    message += `## Fixable Vulnerabilities\n`;
+    message += "<details><summary>Fixable vulnerabilities have been found</summary>\n"
+    message += '| Severity | CVE | Description | Fix Version |\n';
+    message += '| -------- | --- | ----------- | ----------- |\n';
+    vulnFixable.filter(v=>v.severity=='Critical')
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+    vulnFixable.filter(v=>v.severity=='High')
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+    vulnFixable.filter(v=>v.severity=='Medium')
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+    vulnFixable.filter(v=>v.severity=='Low')
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+    vulnFixable.filter(v=>v.severity=='Info')
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+    message += '</details>\n';
+  }
+
   message += `## Lacework Policies\n`;
   if(policies_violated.length>0) {
     message += `
@@ -57,7 +79,6 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
     message += 'all policies have passed\n'
   }
   console.log(message);
-  console.log(results.cve.image.image_info.image_digest);
   return message;
 }
 
