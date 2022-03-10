@@ -50,8 +50,13 @@ jobs:
       run: |
         curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
         chmod +x lw-scanner
-        ./lw-scanner image evaluate $(echo ${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }} --policy --fail-on-violation-exit-code 1 -q
+        ./lw-scanner image evaluate $(echo ${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }} --policy --fail-on-violation-exit-code 1 -q -v=false
 
+    - uses: actions/github-script@v6
+      id: Hello World
+      with:
+        script: return "Hello!"
+        result-encoding: string
     # - name: Build and push Docker image
     #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
     #   with:
