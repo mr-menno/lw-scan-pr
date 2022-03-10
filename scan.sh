@@ -5,4 +5,5 @@ echo "Scanning:"
 echo "  image=$IMAGE"
 echo "  tag=$TAG"
 ./lw-scanner evaluate $IMAGE $TAG --policy --fail-on-violation-exit-code 1 -v=false --html --html-file lw-scan-result.html > lw-scan-results.json
-jq '.' lw-scan-result.json
+ls
+jq '.' lw-scan-results.json

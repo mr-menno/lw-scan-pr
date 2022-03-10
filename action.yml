@@ -17,6 +17,8 @@ runs:
         curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
         chmod +x lw-scanner
       shell: bash
+    - run: ./scan.sh ${{ inputs.tags }}
+      shell: bash
     - uses: actions/github-script@v6
       with:
         script: |
@@ -25,5 +27,3 @@ runs:
           const github = new GitHub(token, {} );
           const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
           github.issues.createComment({ issue_number, owner, repo, body: 'Hello world ! 👋' });
-    - run: ./scan.sh ${{ inputs.tags }}
-      shell: bash
