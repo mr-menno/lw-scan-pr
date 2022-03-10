@@ -2,6 +2,11 @@ const fs = require('fs');
 
 let policy = {};
 
+function santizeTableCell(text) {
+  return text.replace('|','')
+    .replace("\n","<br />");
+}
+
 policy.result = (github) => {
   let file = fs.readFileSync('lw-scan-result.json');
   let results = JSON.parse(file);
@@ -48,26 +53,25 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
 
   if(vulnFixable.length>0) {
     message += `## Fixable Vulnerabilities\n`;
-    message += "<details><summary>Fixable vulnerabilities have been found</summary>\n"
+    message += "<details><summary>Fixable vulnerabilities have been found</summary>\n\n"
     message += '| Severity | CVE | Description | Fix Version |\n';
     message += '| -------- | --- | ----------- | ----------- |\n';
     vulnFixable.filter(v=>v.severity=='Critical')
-      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${santizeTableCell(vuln.description)} | ${vuln.fix_version} |\n`);
     vulnFixable.filter(v=>v.severity=='High')
-      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${santizeTableCell(vuln.description)} | ${vuln.fix_version} |\n`);
     vulnFixable.filter(v=>v.severity=='Medium')
-      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${santizeTableCell(vuln.description)} | ${vuln.fix_version} |\n`);
     vulnFixable.filter(v=>v.severity=='Low')
-      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${santizeTableCell(vuln.description)} | ${vuln.fix_version} |\n`);
     vulnFixable.filter(v=>v.severity=='Info')
-      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${vuln.description} | ${vuln.fix_version} |\n`);
+      .forEach(vuln => message+=`| ${vuln.severity} | ${vuln.name} | ${santizeTableCell(vuln.description)} | ${vuln.fix_version} |\n`);
     message += '</details>\n';
   }
 
   message += `## Lacework Policies\n`;
   if(policies_violated.length>0) {
-    message += `
-    <details>
+    message += `<details>
     <summary>Lacework policies have been violated</summary>
     `;
     policies_violated.forEach(p=> {
