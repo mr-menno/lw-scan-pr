@@ -17,5 +17,5 @@ runs:
         curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
         chmod +x lw-scanner
       shell: bash
-    - run: scan.sh ${{ inputs.tags }}
+    - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
