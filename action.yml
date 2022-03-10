@@ -23,6 +23,10 @@ runs:
       with:
         script: |
           console.log(context);
+          const exec = require('child_process');
+          console.log(exec.execSync('ls').toString());
+          console.log(exec.execSync('pwd').toString());
+          
           const fs = require('fs');
           results = JSON.parse(fs.readFileSync('lw-scan-results.json'));
           console.log(results);
