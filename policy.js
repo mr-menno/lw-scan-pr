@@ -53,6 +53,7 @@ policy.result = (github) => {
     message += `</details>`
   }
   console.log(message);
+  return message;
 }
 
 module.exports = policy;
