@@ -23,6 +23,9 @@ runs:
       with:
         script: |
           console.log(context);
+          const fs = require('fs');
+          results = JSON.parse(fs.readFileSync('lw-scan-results.json'));
+          console.log(results);
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
