@@ -37,6 +37,10 @@ jobs:
       with:
         images: ghcr.io/${{ env.IMAGE_NAME }}/test-image
 
+    - name: Build and Tag Image
+      id: build
+      run: docker build -t ${{ steps.meta.outputs.tags }} .
+
     # - name: Build and push Docker image
     #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
     #   with:
@@ -52,8 +56,8 @@ jobs:
     #     chmod +x lw-scanner
     #     ./lw-scanner image evaluate $(echo ${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }} --policy --fail-on-violation-exit-code 1 -q -v=false
 
-    - name: test action
-      id: hello
+    - name: Lacework Scanner
+      id: lacework
       uses: ./
       with:
         tags: ${{ steps.meta.outputs.tags }}
