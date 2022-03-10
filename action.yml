@@ -19,7 +19,7 @@ runs:
       shell: bash
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
-    - uses: actions/github-scripts@v6
+    - uses: actions/github-script@v6
       with:
         script: |
           console.log(context)
