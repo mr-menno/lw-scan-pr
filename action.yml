@@ -21,11 +21,7 @@ runs:
       with:
         script: |
           console.log(context)
-          await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: 'Welcome, new contributor!'
-          })
+          const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+          github.issues.createComment({ issue_number, owner, repo, body: 'Hello world ! 👋' });
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
