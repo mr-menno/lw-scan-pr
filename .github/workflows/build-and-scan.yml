@@ -52,8 +52,9 @@ jobs:
         chmod +x lw-scanner
         ./lw-scanner image evaluate $(echo ${{ steps.meta.outputs.tags }} | tr ':' ' ') --build-id ${{ github.run_id }} --policy --fail-on-violation-exit-code 1 -q -v=false
 
-    - uses: actions/github-script@v6
-      id: Hello World
+    - name: test action
+      id: hello
+      uses: ./
       with:
         script: return "Hello!"
         result-encoding: string
