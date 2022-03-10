@@ -30,12 +30,11 @@ policy.result = (github) => {
   let message = `
 # Lacework Scanner
 
-Scanned image <strong>${results.cve.image.image_info.repository}:${results.cve.image.image_info.tags.join(',')}</strong><br />
-Image digest <strong>${results.cve.image.image_info.image_digest}</strong>
+Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.image_info.tags.join(',')}**
 
 ## Vulnerability Summary
 | Severity | Count | Fixable |
-| --- | --- |
+| --- | --- | --- |
 | Critical | ${vulnCount.critical.found} | ${vulnCount.critical.fixable} |
 | High | ${vulnCount.high.found} | ${vulnCount.high.fixable} |
 | Medium | ${vulnCount.medium.found} | ${vulnCount.medium.fixable} |
@@ -43,7 +42,7 @@ Image digest <strong>${results.cve.image.image_info.image_digest}</strong>
 | Info | ${vulnCount.info.found} | ${vulnCount.info.fixable} |
 `;
 
-  message += `<h2>Lacework Policies</h2>`;
+  message += `## Lacework Policies\n`;
   if(policies_violated.length>0) {
     message += `
     <details>
@@ -55,7 +54,7 @@ Image digest <strong>${results.cve.image.image_info.image_digest}</strong>
     })
     message += `</details>`
   } else {
-    message += '<p>all policies have passed</p>'
+    message += 'all policies have passed\n'
   }
   console.log(message);
   console.log(results.cve.image.image_info.image_digest);
