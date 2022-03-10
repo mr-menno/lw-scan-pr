@@ -22,16 +22,14 @@ runs:
     - uses: actions/upload-artifact@v3
       with:
         name: lacework-scan-results
-        path: |
-          lw-scan-result.json
-          lw-scan-result.html
+        path: lw-scan-result.*
     - run: npm install execa
       shell: bash
     - uses: actions/github-script@v6
       with:
         script: |
-          const core = require('@actions/core');
-          const github = require('@actions/github');
+          //const core = require('@actions/core');
+          //const github = require('@actions/github');
           //console.log(context);
 
           const execa = require('execa')
