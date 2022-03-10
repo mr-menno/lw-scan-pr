@@ -19,3 +19,13 @@ runs:
       shell: bash
     - run: ./scan.sh ${{ inputs.tags }}
       shell: bash
+    - uses: actions/github-scripts@v6
+      with:
+        script: |
+          console.log(context)
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Welcome, new contributor!'
+          })
