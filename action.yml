@@ -12,17 +12,10 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - id: download-lw-scanner
+      run: |
         curl -sSL https://github.com/lacework/lacework-vulnerability-scanner/releases/latest/download/lw-scanner-linux-amd64 -o lw-scanner
         chmod +x lw-scanner
       shell: bash
-    - id: tags
-      run: echo ${{ inputs.tags }}
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash          
-    - run: goodbye.sh
+    - run: scan.sh ${{ inputs.tags }}
       shell: bash
