@@ -2,6 +2,7 @@
 which docker
 docker ps
 env
+ls /var/run/*.sock
 IMAGE=$(echo $1 | cut -f1 -d:)
 TAG=$(echo $1 | cut -f2 -d:)
 echo "Scanning:"
