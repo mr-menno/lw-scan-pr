@@ -15,9 +15,6 @@ runs:
     - id: image-tags
       run: ./split_image_tag.sh ${{ inputs.tags }}
       shell: bash
-    - name: Set env
-      run: echo ::set-env name=workspace::$GITHUB_WORKSPACE
-      shell: bash
     - name: dump context
       env: 
         GITHUB_CONTENXT: ${{ toJson(env) }}
