@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Scan Image'
+name: 'Lacework Scanner'
+description: 'Scan container images for vulnerabitilies using Lacework'
 inputs:
   tags:  # id of input
     description: 'image repo and tags'
@@ -12,7 +12,16 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: ./scan.sh ${{ inputs.tags }}
+    - id: image-tags
+      run: ./split_image_tag.sh ${{ inputs.tags }}
+      shell: bash
+    - name: Set env
+      run: echo ::set-env name=workspace::$GITHUB_WORKSPACE
+      shell: bash
+    - name: dump context
+      env: 
+        GITHUB_CONTENXT: ${{ toJson(env) }}
+      run: echo "$GITHUB_CONTEXT"
       shell: bash
     - uses: actions/upload-artifact@v3
       with:
