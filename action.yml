@@ -16,9 +16,7 @@ runs:
       run: ./split_image_tag.sh ${{ inputs.tags }}
       shell: bash
     - name: dump context
-      env: 
-        GITHUB_CONTENXT: ${{ toJson(env) }}
-      run: echo "$GITHUB_CONTEXT"
+      run: env
       shell: bash
     - uses: actions/upload-artifact@v3
       with:
