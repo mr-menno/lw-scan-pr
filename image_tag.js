@@ -1,6 +1,8 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
+  IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
+  IMAGE_TAG=JSON.parse(IMAGE_TAG||"");
   console.log({
     IMAGE_NAME: IMAGE_NAME,
     IMAGE_TAG: IMAGE_TAG
