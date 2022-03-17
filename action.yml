@@ -24,7 +24,6 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          const core = require('@actions/core');
           const imageTag = require('./image_tag');
           return(imageTag.processNameAndTag({
             IMAGE_NAME: core.getInput("IMAGE_NAME"),
