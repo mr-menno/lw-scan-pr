@@ -45,7 +45,6 @@ policy.result = ({github,context,fail_policy,fail_threshold}) => {
   console.log("Scan Results JSON",resultsjson);
   let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
-  console.log(JSON.stringify(context,null,2))
   results.policy = results.policy || [];
   let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
   console.log(JSON.stringify(results,null,2));
