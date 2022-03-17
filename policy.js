@@ -43,8 +43,8 @@ policy.result = (github) => {
   }
   console.log("Scan Results JSON",resultsjson);
   let file = fs.readFileSync(resultsjson);
-  console.log(file);
   let results = JSON.parse(file);
+  console.log(JSON.stringify(results,null,2))
   let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
 
   //---- VULN COUNT
