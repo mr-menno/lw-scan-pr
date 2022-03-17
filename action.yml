@@ -39,8 +39,7 @@ runs:
           image evaluate
           ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }}
           ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
-          -v=false -q -s
-          > /github/workspace/lw-scan-results.json
+          -v=false -q -s > /github/workspace/lw-scan-results.json
     - uses: actions/upload-artifact@v3
       with:
         name: lacework-scan-results
