@@ -29,9 +29,6 @@ runs:
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
-    - id: test
-      shell: bash
-      run: echo '${{ steps.tags.outputs.result }}'
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
@@ -39,7 +36,10 @@ runs:
           image evaluate
           ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }}
           ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
-          -v=false -q -s > /github/workspace/lw-scan-results.json
+          -v=false -q
+    - id: test
+      shell: bash
+      run: echo '${{ steps.scanimage.outputs }}'
     - uses: actions/upload-artifact@v3
       with:
         name: lacework-scan-results
