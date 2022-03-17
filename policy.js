@@ -20,7 +20,8 @@ var walk = function(dir) {
 }
 
 function findEvaluationJson() {
-  console.log(walk('./lw-scanner-data'));
+  let files = walk('./lw-scanner-data');
+  return files.find(f=>f.match(/evaluation.*\.json/))
 }
 
 function santizeTableCell(text) {
@@ -29,7 +30,8 @@ function santizeTableCell(text) {
 }
 
 policy.result = (github) => {
-  findEvaluationJson();
+  let resultsjson = findEvaluationJson();
+  console.log(resultsjson);
   return;
   let file = fs.readFileSync('lw-scan-results.json');
   let results = JSON.parse(file);
