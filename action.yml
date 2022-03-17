@@ -29,6 +29,9 @@ runs:
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
+    - id: clean-old-scan-results
+      run: rm -rf lw-scanner-data
+      shell: bash
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
@@ -39,13 +42,14 @@ runs:
           -w=false 
           --data-directory /github/workspace/lw-scanner-data
           --html --html-file /github/workspace/lw-scan-results.html
-    - id: test
-      shell: bash
-      run: find ${{ github.workspace }}/* -type f
     - uses: actions/upload-artifact@v3
       with:
         name: lacework-scan-results
-        path: lw-scan-results.*
+        path: lw-scan-results.*    
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results-json
+        path: "**/evaluation*.json"
     - uses: actions/github-script@v6
       with:
         script: |
