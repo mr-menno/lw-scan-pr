@@ -50,4 +50,5 @@ jobs:
       uses: ./
       with:
         IMAGE_TAG: ${{ steps.meta.outputs.tags }}
-        FAIL_POLICY: true
+        FAIL_POLICY: false
+        FAIL_SEVERITY: medium-fixable

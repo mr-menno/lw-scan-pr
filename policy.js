@@ -117,7 +117,13 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
     })
     message += "\n";
     message += `</details>`
-    if(fail_policy) result_code=2;
+    if(fail_policy) {
+      console.warn("Warning: failing due to policy violations")
+      policies_violated.forEach(policy => {
+        console.warn(`${p.Policy.policy_type} - ${p.Policy.policy_name}`)
+      })
+      result_code=2;
+    }
   } else if (results.policy.length<1) { 
     message += 'No Scanning Policies have been attached\n'
   } else {
