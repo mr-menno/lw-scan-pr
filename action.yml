@@ -47,7 +47,7 @@ runs:
           image evaluate
           ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }}
           ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
-          -w=false -p -e
+          -w=false --policy --exceptions
           --data-directory /github/workspace/lw-scanner-data
           --html --html-file /github/workspace/lw-scan-results.html
     - uses: actions/upload-artifact@v3
