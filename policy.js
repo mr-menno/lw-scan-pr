@@ -42,7 +42,7 @@ policy.result = (github) => {
     };
   }
   console.log("Scan Results JSON",resultsjson);
-  let file = fs.readFileSync('lw-scan-results.json');
+  let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
   let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
 
@@ -125,18 +125,3 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
 }
 
 module.exports = policy;
-
-/*
-
-          const fs = require('fs');
-          let file = fs.readFileSync('lw-scan-result.json');
-          console.log(file);
-          let results = JSON.parse(file);
-          console.log(results);
-          await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Welcome, new contributor!'
-          })
-*/

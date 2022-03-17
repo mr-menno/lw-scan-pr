@@ -61,6 +61,7 @@ runs:
           try {
             policy_result = policy.result(github);
           } catch(e) {
+            console.log("Error: failed to analyze Lacework scanner results");
             policy_result = {
               message: "Failed to analyze Lacework scanner results",
               code: 1
