@@ -61,11 +61,11 @@ runs:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
-          //console.log(context);
+          // console.log(context);
           const policy = require('./policy.js');
           let policy_result;
           try {
-            policy_result = policy.result(github);
+            policy_result = policy.result({github,context});
           } catch(e) {
             console.log("Error: failed to analyze Lacework scanner results");
             console.error(e);

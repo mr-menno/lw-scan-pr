@@ -31,7 +31,7 @@ function santizeTableCell(text) {
     .replace("\n","<br />");
 }
 
-policy.result = (github) => {
+policy.result = ({github,context}) => {
   let resultsjson = findEvaluationJson();
 
   if(!resultsjson) {
@@ -44,9 +44,10 @@ policy.result = (github) => {
   console.log("Scan Results JSON",resultsjson);
   let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
-  console.log(JSON.stringify(github,null,2))
+  console.log(JSON.stringify(context,null,2))
   results.policy = results.policy || [];
   let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
+  console.log(JSON.stringify(results,null,2));
 
   //---- VULN COUNT
   let vulnCount = {
@@ -60,7 +61,6 @@ policy.result = (github) => {
   results.cve.image.image_layers.filter(l=>l.packages.length>0).forEach(layer => {
     layer.packages.forEach(package => {
       package.vulnerabilities.forEach(vulnerability => {
-        console.log(vulnerability);
         if(vulnerability.status=='VULNERABLE') {
           vulnCount[vulnerability.severity.toLowerCase()].found++;
           if(vulnerability.fix_version) { 
@@ -121,7 +121,6 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   } else {
     message += 'All policies have passed\n'
   }
-  console.log(message);
   return {
     message: message,
     code: 0
