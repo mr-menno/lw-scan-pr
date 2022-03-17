@@ -31,8 +31,9 @@ function santizeTableCell(text) {
     .replace("\n","<br />");
 }
 
-policy.result = ({github,context}) => {
+policy.result = ({github,context,fail_policy,fail_threshold}) => {
   let resultsjson = findEvaluationJson();
+  let result_code = 0;
 
   if(!resultsjson) {
     console.error("Error: Scan results NOT found");
@@ -107,6 +108,7 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   }
 
   message += `## Lacework Policies\n`;
+  fail_policy = fail_policy==="true"?true:false;
   if(policies_violated.length>0) {
     message += '<details><summary>Lacework policies have been violated</summary>\n\n';
     message += '| Policy | Details |\n';
@@ -116,6 +118,7 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
     })
     message += "\n";
     message += `</details>`
+    if(fail_policy) result_code=2;
   } else if (results.policy.length<1) { 
     message += 'No Scanning Policies have been attached\n'
   } else {

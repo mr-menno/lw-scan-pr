@@ -66,11 +66,15 @@ runs:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
-          console.log('INPUT',process.env);
           const policy = require('./policy.js');
           let policy_result;
           try {
-            policy_result = policy.result({github,context});
+            policy_result = policy.result({
+              github,
+              context,
+              fail_policy:process.env.FAIL_POLICY,
+              fail_threshold:process.env.FAIL_THRESHOLD
+            });
           } catch(e) {
             console.log("Error: failed to analyze Lacework scanner results");
             console.error(e);
