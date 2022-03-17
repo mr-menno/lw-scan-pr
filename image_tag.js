@@ -1,6 +1,9 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
+  IMAGE_NAME=IMAGE_NAME||"";
+  IMAGE_TAG=IMAGE_TAG||"";
+
   if(IMAGE_TAG.match(/\n/)) {
     console.log("Multiple tags found",IMAGE_TAG);
     IMAGE_TAG=(IMAGE_TAG||"").split("\n")[0];
