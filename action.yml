@@ -38,6 +38,7 @@ runs:
           ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
           -w=false 
           --data-directory /github/workspace/lw-scanner-data
+          --html --html-file /github/workspace/lw-scan-results.html
     - id: test
       shell: bash
       run: find ${{ github.workspace }}/* -type f
