@@ -43,6 +43,7 @@ policy.result = (github) => {
   }
   console.log("Scan Results JSON",resultsjson);
   let file = fs.readFileSync(resultsjson);
+  console.log(file);
   let results = JSON.parse(file);
   let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
 
