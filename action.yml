@@ -1,10 +1,18 @@
 name: 'Lacework Scanner'
 description: "Scan container images for vulnerabitilies using Lacework"
 inputs:
-  tags:  # id of input
-    description: 'image repo and tags'
+  LW_ACCOUNT_NAME:
+    description: "Your Lacework account name. For example, if your login URL is mycompany.lacework.net, the account name is mycompany."
     required: true
-    default: ''
+  LW_ACCESS_TOKEN:
+    description: "Authorization token. Copy and paste the token from the inline scanner integration created in the Lacework console."
+    required: true
+  IMAGE_NAME:
+    description: "Name of the container image you want to scan, for example, `node`."
+    required: false
+  IMAGE_TAG:
+    description: "Tag of the container image you want to scan, for example, `12.18.2-alpine`."
+    required: false
 outputs:
   random-number:
     description: "Random number"
@@ -16,44 +24,37 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          let IMAGE_NAME="git/mr-menno/test"
-          let IMAGE_TAGS="latest"
-          let TAGS="git/mr-menno/test:latest"
-          if(TAGS) {
-            let _TAGS = TAGS.match(/(.*):([^\/]+)$/);
-            if(_TAGS) {
-              console.log(_TAGS);
-              return _TAGS;
-            } else {
-              console.log("uh oh");
-            }
-          }
+          const imageTag = require('./image_tag');
+          return(imageTag.processNameAndTag({
+            IMAGE_NAME: "${{ inputs.IMAGE_NAME }}",
+            IMAGE_TAG: "${{ inputs.IMAGE_TAG }}"
+          }))
     - id: test
-      run: echo ${{ toJSON(steps.tags)}}
+      run: echo '${{ toJSON(steps.tags)}}'
       shell: bash
-    - id: image-tags
-      run: ./split_image_tag.sh ${{ inputs.tags }}
-      shell: bash
-    - name: dump context
-      run: env
-      shell: bash
-    - uses: actions/upload-artifact@v3
-      with:
-        name: lacework-scan-results
-        path: lw-scan-result.*
-    - uses: actions/github-script@v6
-      with:
-        script: |
-          //const core = require('@actions/core');
-          //const github = require('@actions/github');
-          //console.log(context);
-          const policy = require('./policy.js');
-          let policy_result = policy.result(github);
+    # - id: image-tags
+    #   run: ./split_image_tag.sh ${{ inputs.tags }}
+    #   shell: bash
+    # - name: dump context
+    #   run: env
+    #   shell: bash
+    # - uses: actions/upload-artifact@v3
+    #   with:
+    #     name: lacework-scan-results
+    #     path: lw-scan-result.*
+    # - uses: actions/github-script@v6
+    #   with:
+    #     script: |
+    #       //const core = require('@actions/core');
+    #       //const github = require('@actions/github');
+    #       //console.log(context);
+    #       const policy = require('./policy.js');
+    #       let policy_result = policy.result(github);
           
-          await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: policy_result.message
-          })
-          process.exit(policy_result.code)
+    #       await github.rest.issues.createComment({
+    #           issue_number: context.issue.number,
+    #           owner: context.repo.owner,
+    #           repo: context.repo.repo,
+    #           body: policy_result.message
+    #       })
+    #       process.exit(policy_result.code)

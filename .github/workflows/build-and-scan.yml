@@ -40,4 +40,4 @@ jobs:
       id: lacework
       uses: ./
       with:
-        tags: ${{ steps.meta.outputs.tags }}
+        IMAGE_TAG: ${{ steps.meta.outputs.tags }}
