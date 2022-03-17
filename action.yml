@@ -30,7 +30,7 @@ runs:
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
     - id: scanimage
-      uses: lacework/lacework-inline-scanner:0.2.10
+      uses: docker://lacework/lacework-inline-scanner:0.2.10
       
 
     # - id: image-tags
