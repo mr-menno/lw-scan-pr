@@ -61,7 +61,7 @@ runs:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
-          console.log('INPUT',input);
+          console.log('INPUT',process.env);
           const policy = require('./policy.js');
           let policy_result;
           try {
