@@ -29,7 +29,7 @@ runs:
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
-    - id: scan image
+    - id: scanimage
       uses: lacework/lacework-inline-scanner:0.2.10
       with:
         args: 
