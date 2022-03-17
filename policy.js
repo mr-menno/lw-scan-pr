@@ -35,7 +35,7 @@ policy.result = (github) => {
   let resultsjson = findEvaluationJson();
 
   if(!resultsjson) {
-    console.error("Scan results NOT found");
+    console.error("Error: Scan results NOT found");
     return {
       message: "LW Scanner did not generate a JSON results file",
       code: 1
