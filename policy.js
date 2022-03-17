@@ -45,7 +45,7 @@ policy.result = (github) => {
   let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
   console.log(JSON.stringify(results,null,2))
-  let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
+  let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
 
   //---- VULN COUNT
   let vulnCount = {
