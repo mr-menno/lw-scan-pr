@@ -57,9 +57,9 @@ runs:
         name: lacework-scan-results-json
         path: "**/evaluation*.json"
     - uses: actions/github-script@v6
-      env:
-        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
       with:
+        inputs:
+          IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
