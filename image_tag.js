@@ -1,12 +1,8 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
-  console.log("IMAGE_TAG:",(IMAGE_TAG||"").split("\n")[0]);
-  console.log(JSON.stringify({
-    IMAGE_NAME: IMAGE_NAME,
-    IMAGE_TAG: IMAGE_TAG
-  },null,2))
-  /*IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
+  IMAGE_TAG=(IMAGE_TAG||"").split("\n")[0];
+  IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
   IMAGE_TAG=JSON.parse(IMAGE_TAG||"");
   if(IMAGE_NAME && IMAGE_TAG) {
     let _tagged_name = IMAGE_NAME.match(/(.*):([^\/]+)$/);
@@ -35,7 +31,7 @@ imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
   } else {
     console.error("imageTag: missing IMAGE_NAME and IMAGE_TAG");
     process.exit(1);
-  }*/
+  }
 }
 
 module.exports = imageTag;
