@@ -58,8 +58,7 @@ runs:
         path: "**/evaluation*.json"
     - uses: actions/github-script@v6
       with:
-        inputs:
-          IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
