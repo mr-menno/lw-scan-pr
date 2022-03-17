@@ -31,8 +31,14 @@ function santizeTableCell(text) {
 
 policy.result = (github) => {
   let resultsjson = findEvaluationJson();
-  console.log(resultsjson);
-  return;
+  console.log("Scan Results JSON",resultsjson);
+
+  if(!resultsjson) {
+    return {
+      message: "LW Scanner did not generate a JSON results file",
+      code: 1
+    };
+  }
   let file = fs.readFileSync('lw-scan-results.json');
   let results = JSON.parse(file);
   let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
