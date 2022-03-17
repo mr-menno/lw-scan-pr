@@ -3,7 +3,6 @@ name: Build and Scan
 
 on:
   pull_request:
-  push:
 
 jobs:
   build-and-scan:
