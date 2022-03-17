@@ -1,5 +1,5 @@
 name: 'Lacework Scanner'
-description: 'Scan container images for vulnerabitilies using Lacework'
+description: "Scan container images for vulnerabitilies using Lacework"
 inputs:
   tags:  # id of input
     description: 'image repo and tags'
@@ -12,6 +12,25 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: tags
+      uses: actions/github-script@v6
+      with:
+        script: |
+          let IMAGE_NAME="git/mr-menno/test"
+          let IMAGE_TAGS="latest"
+          let TAGS="git/mr-menno/test:latest"
+          if(TAGS) {
+            let _TAGS = TAGS.match(/(.*):([^\/]+)$/);
+            if(_TAGS) {
+              console.log(_TAGS);
+              return _TAGS;
+            } else {
+              console.log("uh oh");
+            }
+          }
+    - id: test
+      run: echo ${{ toJSON(steps.tags)}}
+      shell: bash
     - id: image-tags
       run: ./split_image_tag.sh ${{ inputs.tags }}
       shell: bash
