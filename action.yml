@@ -24,8 +24,9 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
+          const ghcore = require('@actions/core');
           const imageTag = require('./image_tag');
-          console.log(core.getInput("IMAGE_TAG"));
+          console.log(ghcore.getInput("IMAGE_TAG"));
           return(imageTag.processNameAndTag({
             IMAGE_NAME: core.getInput("IMAGE_NAME"),
             IMAGE_TAG: core.getInput("IMAGE_TAG")
