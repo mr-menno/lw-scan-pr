@@ -33,7 +33,7 @@ runs:
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
         args:
-        - --version
+        - version
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: lacework-scan-results
