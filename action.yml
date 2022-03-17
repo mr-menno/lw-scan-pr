@@ -26,8 +26,8 @@ runs:
         script: |
           const imageTag = require('./image_tag');
           return(imageTag.processNameAndTag({
-            IMAGE_NAME: '${{ toJson(inputs.IMAGE_NAME) }}',
-            IMAGE_TAG: '${{ toJson(inputs.IMAGE_TAG) }}'
+            IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
+            IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
     - id: test
       run: echo '${{ toJSON(steps.tags)}}'
