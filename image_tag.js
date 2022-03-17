@@ -1,9 +1,11 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
-  IMAGE_TAG=(IMAGE_TAG||"").split("\n")[0];
-  IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
-  IMAGE_TAG=JSON.parse(IMAGE_TAG||"");
+  if(IMAGE_TAG.match(/\n/)) {
+    console.log("Multiple tags found",IMAGE_TAG);
+    IMAGE_TAG=(IMAGE_TAG||"").split("\n")[0];
+    console.log("Using first tag=",IMAGE_TAG);
+  }
   if(IMAGE_NAME && IMAGE_TAG) {
     let _tagged_name = IMAGE_NAME.match(/(.*):([^\/]+)$/);
     let _tagged_tag = IMAGE_TAG.match(/(.*):([^\/]+)$/);
