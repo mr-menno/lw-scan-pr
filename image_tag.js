@@ -1,6 +1,10 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
+  console.log({
+    IMAGE_NAME: IMAGE_NAME,
+    IMAGE_TAG: IMAGE_TAG
+  })
   if(IMAGE_NAME && IMAGE_TAG) {
     let _tagged_name = IMAGE_NAME.match(/(.*):([^\/]+)$/);
     let _tagged_tag = IMAGE_TAG.match(/(.*):([^\/]+)$/);
