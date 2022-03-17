@@ -59,12 +59,13 @@ runs:
         name: lacework-scan-results-json
         path: "**/evaluation*.json"
     - uses: actions/github-script@v6
-      with:
+      env:
         IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+      with:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
-          console.log('INPUT',process.env['INPUT_FAIL_SEVERITY']);
+          console.log('INPUT',process.env);
           const policy = require('./policy.js');
           let policy_result;
           try {
