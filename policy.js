@@ -122,6 +122,7 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   } else if (results.policy.length<1) { 
     message += 'No Scanning Policies have been attached\n'
   } else {
+    //REMOVE THIS
     message += 'All policies have passed\n'+JSON.stringify(result.policy,null,2)
   }
   return {
