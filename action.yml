@@ -35,10 +35,7 @@ runs:
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
-        args: |
-          image evaluate \
-          ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }} \
-          ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
+        args: image evaluate ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }} ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: lacework-scan-results
