@@ -40,23 +40,24 @@ runs:
           ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }}
           ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
           -v=false -q -s
-    # - uses: actions/upload-artifact@v3
-    #   with:
-    #     name: lacework-scan-results
-    #     path: lw-scan-result.*
-    # - uses: actions/github-script@v6
-    #   with:
-    #     script: |
-    #       //const core = require('@actions/core');
-    #       //const github = require('@actions/github');
-    #       //console.log(context);
-    #       const policy = require('./policy.js');
-    #       let policy_result = policy.result(github);
+          > /github/workspace/lw-scan-results.json
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results
+        path: lw-scan-results.*
+    - uses: actions/github-script@v6
+      with:
+        script: |
+          //const core = require('@actions/core');
+          //const github = require('@actions/github');
+          //console.log(context);
+          const policy = require('./policy.js');
+          let policy_result = policy.result(github);
           
-    #       await github.rest.issues.createComment({
-    #           issue_number: context.issue.number,
-    #           owner: context.repo.owner,
-    #           repo: context.repo.repo,
-    #           body: policy_result.message
-    #       })
-    #       process.exit(policy_result.code)
+          await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: policy_result.message
+          })
+          process.exit(policy_result.code)

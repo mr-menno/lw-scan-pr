@@ -8,7 +8,7 @@ function santizeTableCell(text) {
 }
 
 policy.result = (github) => {
-  let file = fs.readFileSync('lw-scan-result.json');
+  let file = fs.readFileSync('lw-scan-results.json');
   let results = JSON.parse(file);
   let policies_violated = results.policy.filter(p=>p.status=='VIOLATED');
 
