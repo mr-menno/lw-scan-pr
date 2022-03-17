@@ -31,7 +31,7 @@ runs:
           }))
     - id: test
       shell: bash
-      run: echo '${{ toJson(steps.tags.outputs) }}'
+      run: echo '${{ toJson(steps.tags.outputs.result) }}'
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
