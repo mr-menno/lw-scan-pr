@@ -60,7 +60,8 @@ runs:
         path: "**/evaluation*.json"
     - uses: actions/github-script@v6
       env:
-        IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+        FAIL_SEVERITY: ${{ inputs.FAIL_SEVERITY }}
+        FAIL_POLICY: ${{ inputs.FAIL_POLICY }}
       with:
         script: |
           //const core = require('@actions/core');
