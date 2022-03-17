@@ -16,9 +16,11 @@ inputs:
   FAIL_POLICY:
     description: "Should the scan fail on policy violations?"
     required: false
+    default: "false"
   FAIL_SEVERITY:
     description: "List of failure reasons [critical, critical-fixable, high, high-fixable, medium, medium-fixable, low, low-fixable, info, info-fixable]"
     required: false
+    default: "false"
 outputs:
   random-number:
     description: "Random number"
@@ -62,7 +64,7 @@ runs:
         script: |
           //const core = require('@actions/core');
           //const github = require('@actions/github');
-          console.log('INPUT',process.env);
+          console.log('INPUT',process.env['INPUT_FAIL_SEVERITY']);
           const policy = require('./policy.js');
           let policy_result;
           try {
