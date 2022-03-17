@@ -126,7 +126,7 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   }
   return {
     message: message,
-    code: 0
+    code: result_code
   };
 }
 
