@@ -37,8 +37,8 @@ runs:
       with:
         args: |
           image evaluate \
-          ${{ steps.tags.output.results.IMAGE_NAME }} \
-          ${{ steps.tags.output.results.IMAGE_TAG}}
+          ${{ steps.tags.output.result.IMAGE_NAME }} \
+          ${{ steps.tags.output.result.IMAGE_TAG}}
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: lacework-scan-results
