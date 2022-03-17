@@ -29,6 +29,9 @@ runs:
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
+    - id: test
+      shell: bash
+      run: echo '${{ toJson(steps.tags) }}'
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
