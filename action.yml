@@ -31,14 +31,14 @@ runs:
           }))
     - id: test
       shell: bash
-      run: echo '${{ toJson(steps.tags) }}'
+      run: echo '${{ toJson(steps.tags.outputs.result.IMAGE_TAG) }}'
     - id: scanimage
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
         args: |
           image evaluate \
-          ${{ steps.tags.output.result.IMAGE_NAME }} \
-          ${{ steps.tags.output.result.IMAGE_TAG}}
+          ${{ steps.tags.outputs.result.IMAGE_NAME }} \
+          ${{ steps.tags.outputs.result.IMAGE_TAG}}
     # - uses: actions/upload-artifact@v3
     #   with:
     #     name: lacework-scan-results
