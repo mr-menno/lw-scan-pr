@@ -57,7 +57,15 @@ runs:
           //const github = require('@actions/github');
           //console.log(context);
           const policy = require('./policy.js');
-          let policy_result = policy.result(github);
+          let policy_result;
+          try {
+            policy_result = policy.result(github);
+          } catch(e) {
+            policy_result = {
+              message: "Failed to analyze Lacework scanner results",
+              code: 1
+            }
+          }
           
           await github.rest.issues.createComment({
               issue_number: context.issue.number,
