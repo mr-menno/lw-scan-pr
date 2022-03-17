@@ -45,6 +45,7 @@ policy.result = (github) => {
   let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
   console.log(JSON.stringify(results,null,2))
+  results.policy = results.policy || [];
   let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
 
   //---- VULN COUNT
@@ -115,6 +116,8 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
     })
     message += "\n";
     message += `</details>`
+  } else if (results.policies.length<1) { 
+    message += 'No Scanning Policies have been attached\n'
   } else {
     message += 'All policies have passed\n'
   }

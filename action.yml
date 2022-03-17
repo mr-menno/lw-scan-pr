@@ -13,6 +13,12 @@ inputs:
   IMAGE_TAG:
     description: "Tag of the container image you want to scan, for example, `12.18.2-alpine`."
     required: false
+  FAIL_POLICY:
+    description: "Should the scan fail on policy violations?"
+    required: false
+  FAIL_SEVERITY:
+    description: "List of failure reasons [critical, critical-fixable, high, high-fixable, medium, medium-fixable, low, low-fixable, info, info-fixable]"
+    required: false
 outputs:
   random-number:
     description: "Random number"
