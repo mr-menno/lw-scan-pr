@@ -110,7 +110,7 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   message += `## Lacework Policies\n`;
   fail_policy = fail_policy==="true"?true:false;
   if(policies_violated.length>0) {
-    message += '<details><summary>Lacework policies have been violated</summary>\n\n';
+    message += `<details><summary>Lacework policies have been violated ${fail_policy?"(failing scan results due to policy)":""}</summary>\n\n`;
     message += '| Policy | Details |\n';
     message += '| --- | --- |\n';
     policies_violated.forEach(p=> {
