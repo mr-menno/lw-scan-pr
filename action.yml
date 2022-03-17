@@ -29,9 +29,12 @@ runs:
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
-    - id: test
-      run: echo '${{ toJSON(steps.tags)}}'
-      shell: bash
+    - id: scan image
+      uses: lacework/lacework-inline-scanner:0.2.10
+      with:
+        args: 
+        - --version
+
     # - id: image-tags
     #   run: ./split_image_tag.sh ${{ inputs.tags }}
     #   shell: bash
