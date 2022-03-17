@@ -1,12 +1,12 @@
 let imageTag = {};
 
 imageTag.processNameAndTag = function({IMAGE_NAME,IMAGE_TAG}) {
-  IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
-  IMAGE_TAG=JSON.parse(IMAGE_TAG||"");
-  console.log({
+  console.log(JSON.stringify({
     IMAGE_NAME: IMAGE_NAME,
     IMAGE_TAG: IMAGE_TAG
-  })
+  },null,2))
+  IMAGE_NAME=JSON.parse(IMAGE_NAME||"");
+  IMAGE_TAG=JSON.parse(IMAGE_TAG||"");
   if(IMAGE_NAME && IMAGE_TAG) {
     let _tagged_name = IMAGE_NAME.match(/(.*):([^\/]+)$/);
     let _tagged_tag = IMAGE_TAG.match(/(.*):([^\/]+)$/);
