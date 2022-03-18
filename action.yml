@@ -25,6 +25,10 @@ inputs:
     description: prevent any blocking of results.  Set to false to prevent blocking
     required: false
     default: "true"
+  LACEWORK_SCANNER_RELEASE:
+    description: lacework/lacework-inline-scanner release
+    required: false
+    default: 0.2.10
 outputs:
   random-number:
     description: "Random number"
@@ -45,7 +49,7 @@ runs:
       run: rm -rf lw-scanner-data
       shell: bash
     - id: scanimage
-      uses: docker://lacework/lacework-inline-scanner:0.2.10
+      uses: docker://lacework/lacework-inline-scanner:${{ inputs.LACEWORK_SCANNER_RELEASE }}
       with:
         args: >
           image evaluate

@@ -27,6 +27,7 @@ optionally be affixed with `-fixable` to require the threshold to have fixable v
     IMAGE_TAG: <latest|pr-2|...>
     FAIL_POLICY: true
     FAIL_SEVERITY: medium-fixable
+    LACEWORK_SCANNER_RELEASE: <latest|0.2.10>
 ```
 
 ## Example
