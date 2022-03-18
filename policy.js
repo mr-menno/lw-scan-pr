@@ -73,6 +73,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   });
 
   vuln_fail_reason="";
+  console.log(JSON.stringify(vulnCount,null,2))
   if(fail_severity==="critical-fixable" && vulnCount.critical.fixable>0) {
     result_code=51;
     vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
@@ -104,7 +105,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
     result_code=11;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
   } else {
-    console.log("vulnerability threshold not configured correctly (",fail_severity?fail_severity:"unset",")")
+    console.log("vulnerability threshold not met")
   }
 
   let message = `
