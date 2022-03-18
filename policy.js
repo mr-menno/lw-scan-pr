@@ -74,6 +74,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
 
   vuln_fail_reason="";
   console.log(JSON.stringify(vulnCount,null,2))
+  console.log("Analyzing vulns for fail severity threshold:",fail_severity);
   if(fail_severity==="critical-fixable" && vulnCount.critical.fixable>0) {
     result_code=51;
     vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
@@ -83,7 +84,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   } if(fail_severity==="high-fixable" && vulnCount.high.fixable>0) {
     result_code=41;
     vuln_fail_reason="Warning: failing due to high AND fixable vulnerabilities";
-  } if(fail_severity==="high" && vulnCount.critihighcal.fixable>0) {
+  } if(fail_severity==="high" && vulnCount.high.fixable>0) {
     result_code=40;
     vuln_fail_reason="Warning: failing due to high vulnerabilities";
   } if(fail_severity==="medium-fixable" && vulnCount.medium.fixable>0) {
