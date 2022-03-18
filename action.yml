@@ -49,7 +49,7 @@ runs:
       run: rm -rf lw-scanner-data
       shell: bash
     - id: scanimage
-      uses: docker://lacework/lacework-inline-scanner:${{ inputs.LACEWORK_SCANNER_RELEASE }}
+      uses: "docker://lacework/lacework-inline-scanner:${{ inputs.LACEWORK_SCANNER_RELEASE }}"
       with:
         args: >
           image evaluate
