@@ -169,8 +169,8 @@ ${vuln_fail_reason}
     message += `<details><summary>Lacework policies have been violated ${fail_policy?"(failing scan results due to policy)":""}</summary>\n\n`;
     message += '| Policy | Details |\n';
     message += '| --- | --- |\n';
-    policies_violated.forEach(p=> {
-      message+=`| **${p.Policy.policy_type} - ${p.Policy.policy_name} ** | ${p.Policy.description} |\n`;
+    policies_violated.forEach(policy=> {
+      message+=`| **${policy.Policy.policy_type} - ${policy.Policy.policy_name} ** | ${policy.Policy.description} |\n`;
     })
     message += "\n";
     message += `</details>`
@@ -178,7 +178,7 @@ ${vuln_fail_reason}
       // If FAIL_POLCY==true and violated policies have been found
       console.warn("Warning: failing due to policy violations")
       policies_violated.forEach(policy => {
-        console.warn(`${p.Policy.policy_type} - ${p.Policy.policy_name}`)
+        console.warn(`${policy.Policy.policy_type} - ${policy.Policy.policy_name}`)
       })
       result_code=2;
     }
