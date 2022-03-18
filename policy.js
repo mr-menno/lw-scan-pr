@@ -79,32 +79,32 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   } if(fail_severity==="critical" && vulnCount.critical.fixable>0) {
     result_code=50;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
-  } if(fail_severity==="high-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="high-fixable" && vulnCount.high.fixable>0) {
     result_code=41;
     vuln_fail_reason="Warning: failing due to high AND fixable vulnerabilities";
-  } if(fail_severity==="high" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="high" && vulnCount.critihighcal.fixable>0) {
     result_code=40;
     vuln_fail_reason="Warning: failing due to high vulnerabilities";
-  } if(fail_severity==="medium-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="medium-fixable" && vulnCount.medium.fixable>0) {
     result_code=31;
     vuln_fail_reason="Warning: failing due to medium AND fixable vulnerabilities";
-  } if(fail_severity==="medium" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="medium" && vulnCount.medium.fixable>0) {
     result_code=30;
     vuln_fail_reason="Warning: failing due to medium vulnerabilities";
-  } if(fail_severity==="low-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="low-fixable" && vulnCount.low.fixable>0) {
     result_code=21;
     vuln_fail_reason="Warning: failing due to low AND fixable vulnerabilities";
-  } if(fail_severity==="low" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="low" && vulnCount.low.fixable>0) {
     result_code=20;
     vuln_fail_reason="Warning: failing due to low vulnerabilities";
-  } if(fail_severity==="info-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="info-fixable" && vulnCount.info.fixable>0) {
     result_code=10;
     vuln_fail_reason="Warning: failing due to info AND fixable vulnerabilities";
-  } if(fail_severity==="info" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="info" && vulnCount.info.fixable>0) {
     result_code=11;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
   } else {
-    console.log("vulnerability threshold not configured",fail_severity)
+    console.log("vulnerability threshold not configured correctly (",fail_severity?fail_severity:"unset",")")
   }
 
   let message = `
