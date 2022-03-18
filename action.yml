@@ -21,6 +21,10 @@ inputs:
     description: "List of failure reasons [critical, critical-fixable, high, high-fixable, medium, medium-fixable, low, low-fixable, info, info-fixable]"
     required: false
     default: "false"
+  BLOCKING:
+    description: prevent any blocking of results.  Set to false to prevent blocking
+    required: false
+    default: "true"
 outputs:
   random-number:
     description: "Random number"
@@ -32,8 +36,8 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          const imageTag = require('./image_tag');
-          return(imageTag.processNameAndTag({
+          const ImageTag = require('./ImageTag');
+          return(ImageTag.processNameAndTag({
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
@@ -62,32 +66,36 @@ runs:
       env:
         FAIL_SEVERITY: ${{ inputs.FAIL_SEVERITY }}
         FAIL_POLICY: ${{ inputs.FAIL_POLICY }}
+        BLOCKING: ${{ inputs.BLOCKING }}
       with:
         script: |
-          //const core = require('@actions/core');
-          //const github = require('@actions/github');
-          const policy = require('./policy.js');
-          let policy_result;
+          const LwScanAnalyzer = require('./LwScanAnalyzer.js');
+
+          // analyze vulnerability data
+          let result;
           try {
-            policy_result = policy.result({
+            result = LwScanAnalyzer.result({
               github,
               context,
               fail_policy:process.env.FAIL_POLICY,
-              fail_severity:process.env.FAIL_SEVERITY
+              fail_severity:process.env.FAIL_SEVERITY,
+              blocking:process.env.BLOCKING=="true"?true:false
             });
           } catch(e) {
             console.log("Error: failed to analyze Lacework scanner results");
             console.error(e);
-            policy_result = {
+            LwScanAnalyzer = {
               message: "Failed to analyze Lacework scanner results",
               code: 1
             }
           }
           
-          await github.rest.issues.createComment({
+          if(github.event_name==="pull_request") {
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: policy_result.message
-          })
-          process.exit(policy_result.code)
+            })
+          }
+          process.exit(LwScanAnalyzer.code)

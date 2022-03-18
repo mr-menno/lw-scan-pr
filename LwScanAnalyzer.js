@@ -1,8 +1,9 @@
 const fs = require('fs');
 
-let policy = {};
+// ---- supporting functions ----
 
-var walk = function(dir) {
+// function to walk a directory tree
+function walkDir(dir) {
   var results = [];
   try {
     var list = fs.readdirSync(dir);
@@ -11,7 +12,7 @@ var walk = function(dir) {
         var stat = fs.statSync(file);
         if (stat && stat.isDirectory()) { 
             /* Recurse into a subdirectory */
-            results = results.concat(walk(file));
+            results = results.concat(walkDir(file));
         } else { 
             /* Is a file */
             results.push(file);
@@ -21,20 +22,30 @@ var walk = function(dir) {
   return results;
 }
 
+// walk the tree and find the evaluation*.json file
 function findEvaluationJson() {
-  let files = walk('./lw-scanner-data');
+  let files = walkDir('./lw-scanner-data');
   return files.find(f=>f.match(/evaluation.*\.json/))
 }
 
+// function to clean stray values from the table cells such as newlines.
 function santizeTableCell(text) {
   return text.replace('|','')
     .replace("\n","<br />");
 }
 
-policy.result = ({github,context,fail_policy,fail_severity}) => {
+// ---- policy module ----
+let LwScanAnalyzer = {};
+
+// analyze results
+LwScanAnalyzer.result = ({github,context,fail_policy,fail_severity,blocking}) => {
+  //get scan results evaluation json file
   let resultsjson = findEvaluationJson();
+  
+  //set initial result code
   let result_code = 0;
 
+  //error if scan results were not found
   if(!resultsjson) {
     console.error("Error: Scan results NOT found");
     return {
@@ -42,6 +53,8 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
       code: 1
     };
   }
+
+  // read evaluation.json for scan results
   console.log("Scan Results JSON",resultsjson);
   let file = fs.readFileSync(resultsjson);
   let results = JSON.parse(file);
@@ -49,7 +62,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
   console.log(JSON.stringify(results,null,2));
 
-  //---- VULN COUNT
+  // count all found and fixable vulnerabilities
   let vulnCount = {
     critical: {found:0, fixable:0},
     high: {found:0, fixable:0},
@@ -72,6 +85,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
     })
   });
 
+  // determine if a vulnerability should cause a failure
   vuln_fail_reason="";
   console.log(JSON.stringify(vulnCount,null,2))
   console.log("Analyzing vulns for fail severity threshold:",fail_severity);
@@ -110,6 +124,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   }
   if(vuln_fail_reason) console.warn("Warning: "+vuln_fail_reason)
 
+  // Generate vulnerabilities details message  
   let message = `
 # Lacework Scanner
 
@@ -147,6 +162,7 @@ ${vuln_fail_reason}
     message += '</details>\n\n';
   }
 
+  // Analyze Policies and Generate Policy Message
   message += `## Lacework Policies\n`;
   fail_policy = fail_policy==="true"?true:false;
   if(policies_violated.length>0) {
@@ -159,6 +175,7 @@ ${vuln_fail_reason}
     message += "\n";
     message += `</details>`
     if(fail_policy) {
+      // If FAIL_POLCY==true and violated policies have been found
       console.warn("Warning: failing due to policy violations")
       policies_violated.forEach(policy => {
         console.warn(`${p.Policy.policy_type} - ${p.Policy.policy_name}`)
@@ -167,15 +184,12 @@ ${vuln_fail_reason}
     }
   } else if (results.policy.length<1) { 
     message += 'No Scanning Policies have been attached\n'
-  } else {
-    //REMOVE THIS
-    message += 'All policies have passed\n'+JSON.stringify(result.policy,null,2)
   }
   return {
-    message: message,
-    code: result_code,
+    message,
+    code: blocking?result_code:0, //don't block if disabled
     vuln_fail_reason
   };
 }
 
-module.exports = policy;
+module.exports = LwScanAnalyzer;
