@@ -183,7 +183,7 @@ ${vuln_fail_reason}
   } else if (results.policy.length<1) { 
     message += 'No Scanning Policies have been attached\n'
   }
-  console.log("Blocking??",blocking);
+
   return {
     message,
     code: blocking?result_code:0, //don't block if disabled
