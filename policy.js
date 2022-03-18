@@ -31,7 +31,7 @@ function santizeTableCell(text) {
     .replace("\n","<br />");
 }
 
-policy.result = ({github,context,fail_policy,fail_threshold}) => {
+policy.result = ({github,context,fail_policy,fail_severity}) => {
   let resultsjson = findEvaluationJson();
   let result_code = 0;
 
@@ -73,34 +73,34 @@ policy.result = ({github,context,fail_policy,fail_threshold}) => {
   });
 
   vuln_fail_reason="";
-  if(fail_threshold==="critical-fixable" && vulnCount.critical.fixable>0) {
+  if(fail_severity==="critical-fixable" && vulnCount.critical.fixable>0) {
     result_code=51;
     vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
-  } if(fail_threshold==="critical" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="critical" && vulnCount.critical.fixable>0) {
     result_code=50;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
-  } if(fail_threshold==="high-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="high-fixable" && vulnCount.critical.fixable>0) {
     result_code=41;
     vuln_fail_reason="Warning: failing due to high AND fixable vulnerabilities";
-  } if(fail_threshold==="high" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="high" && vulnCount.critical.fixable>0) {
     result_code=40;
     vuln_fail_reason="Warning: failing due to high vulnerabilities";
-  } if(fail_threshold==="medium-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="medium-fixable" && vulnCount.critical.fixable>0) {
     result_code=31;
     vuln_fail_reason="Warning: failing due to medium AND fixable vulnerabilities";
-  } if(fail_threshold==="medium" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="medium" && vulnCount.critical.fixable>0) {
     result_code=30;
     vuln_fail_reason="Warning: failing due to medium vulnerabilities";
-  } if(fail_threshold==="low-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="low-fixable" && vulnCount.critical.fixable>0) {
     result_code=21;
     vuln_fail_reason="Warning: failing due to low AND fixable vulnerabilities";
-  } if(fail_threshold==="low" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="low" && vulnCount.critical.fixable>0) {
     result_code=20;
     vuln_fail_reason="Warning: failing due to low vulnerabilities";
-  } if(fail_threshold==="info-fixable" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="info-fixable" && vulnCount.critical.fixable>0) {
     result_code=10;
     vuln_fail_reason="Warning: failing due to info AND fixable vulnerabilities";
-  } if(fail_threshold==="info" && vulnCount.critical.fixable>0) {
+  } if(fail_severity==="info" && vulnCount.critical.fixable>0) {
     result_code=11;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
   } else {

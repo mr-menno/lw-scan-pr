@@ -73,7 +73,7 @@ runs:
               github,
               context,
               fail_policy:process.env.FAIL_POLICY,
-              fail_threshold:process.env.FAIL_THRESHOLD
+              fail_severity:process.env.FAIL_SEVERITY
             });
           } catch(e) {
             console.log("Error: failed to analyze Lacework scanner results");
