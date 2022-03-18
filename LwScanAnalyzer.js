@@ -86,7 +86,7 @@ LwScanAnalyzer.result = ({github,context,fail_policy,fail_severity,blocking}) =>
 
   // determine if a vulnerability should cause a failure
   vuln_fail_reason="";
-  console.log("Analyzing vulns for fail severity threshold:",fail_severity,JSON.stringify(vulnCount,null,2));
+  console.log("Analyzing vulns for fail severity threshold:",fail_severity);
   if(fail_severity==="critical-fixable" && vulnCount.critical.fixable>0) {
     result_code=51;
     vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
