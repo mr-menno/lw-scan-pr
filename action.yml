@@ -87,10 +87,7 @@ runs:
               code: 1
             }
           }
-          console.log(process.env)
-          console.log(github);
-          console.log(context);
-          if(github.event_name==="pull_request") {
+          if(context.eventName==="pull_request") {
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
