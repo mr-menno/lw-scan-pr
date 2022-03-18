@@ -103,6 +103,8 @@ policy.result = ({github,context,fail_policy,fail_threshold}) => {
   } if(fail_threshold==="info" && vulnCount.critical.fixable>0) {
     result_code=11;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
+  } else {
+    console.log("vulnerability threshold not configured")
   }
 
   let message = `
