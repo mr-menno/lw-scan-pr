@@ -60,7 +60,6 @@ LwScanAnalyzer.result = ({github,context,fail_policy,fail_severity,blocking}) =>
   let results = JSON.parse(file);
   results.policy = results.policy || [];
   let policies_violated = (results.policy||[]).filter(p=>p.status=='VIOLATED');
-  console.log(JSON.stringify(results,null,2));
 
   // count all found and fixable vulnerabilities
   let vulnCount = {
@@ -87,8 +86,7 @@ LwScanAnalyzer.result = ({github,context,fail_policy,fail_severity,blocking}) =>
 
   // determine if a vulnerability should cause a failure
   vuln_fail_reason="";
-  console.log(JSON.stringify(vulnCount,null,2))
-  console.log("Analyzing vulns for fail severity threshold:",fail_severity);
+  console.log("Analyzing vulns for fail severity threshold:",fail_severity,JSON.stringify(vulnCount,null,2));
   if(fail_severity==="critical-fixable" && vulnCount.critical.fixable>0) {
     result_code=51;
     vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
