@@ -72,12 +72,48 @@ policy.result = ({github,context,fail_policy,fail_threshold}) => {
     })
   });
 
+  vuln_fail_reason="";
+  if(fail_threshold==="critical-fixable" && vulnCount.critical.fixable>0) {
+    result_code=51;
+    vuln_fail_reason="Warning: failing due to critical AND fixable vulnerabilities";
+  } if(fail_threshold==="critical" && vulnCount.critical.fixable>0) {
+    result_code=50;
+    vuln_fail_reason="Warning: failing due to critical vulnerabilities";
+  } if(fail_threshold==="high-fixable" && vulnCount.critical.fixable>0) {
+    result_code=41;
+    vuln_fail_reason="Warning: failing due to high AND fixable vulnerabilities";
+  } if(fail_threshold==="high" && vulnCount.critical.fixable>0) {
+    result_code=40;
+    vuln_fail_reason="Warning: failing due to high vulnerabilities";
+  } if(fail_threshold==="medium-fixable" && vulnCount.critical.fixable>0) {
+    result_code=31;
+    vuln_fail_reason="Warning: failing due to medium AND fixable vulnerabilities";
+  } if(fail_threshold==="medium" && vulnCount.critical.fixable>0) {
+    result_code=30;
+    vuln_fail_reason="Warning: failing due to medium vulnerabilities";
+  } if(fail_threshold==="low-fixable" && vulnCount.critical.fixable>0) {
+    result_code=21;
+    vuln_fail_reason="Warning: failing due to low AND fixable vulnerabilities";
+  } if(fail_threshold==="low" && vulnCount.critical.fixable>0) {
+    result_code=20;
+    vuln_fail_reason="Warning: failing due to low vulnerabilities";
+  } if(fail_threshold==="info-fixable" && vulnCount.critical.fixable>0) {
+    result_code=10;
+    vuln_fail_reason="Warning: failing due to info AND fixable vulnerabilities";
+  } if(fail_threshold==="info" && vulnCount.critical.fixable>0) {
+    result_code=11;
+    vuln_fail_reason="Warning: failing due to critical vulnerabilities";
+  }
+
   let message = `
 # Lacework Scanner
 
 Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.image_info.tags.join(',')}**
 
 ## Vulnerability Summary
+
+${vuln_fail_reason}
+
 | Severity | Count | Fixable |
 | --- | --- | --- |
 | Critical | ${vulnCount.critical.found} | ${vulnCount.critical.fixable} |
@@ -132,7 +168,8 @@ Scanned image **${results.cve.image.image_info.repository}:${results.cve.image.i
   }
   return {
     message: message,
-    code: result_code
+    code: result_code,
+    vuln_fail_reason
   };
 }
 
