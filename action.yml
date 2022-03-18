@@ -13,10 +13,18 @@ inputs:
   IMAGE_TAG:
     description: "Tag of the container image you want to scan, for example, `12.18.2-alpine`."
     required: false
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
+  FAIL_POLICY:
+    description: "Should the scan fail on policy violations?"
+    required: false
+    default: "false"
+  FAIL_SEVERITY:
+    description: "List of failure reasons [critical, critical-fixable, high, high-fixable, medium, medium-fixable, low, low-fixable, info, info-fixable]"
+    required: false
+    default: "false"
+  BLOCKING:
+    description: prevent any blocking of results.  Set to false to prevent blocking
+    required: false
+    default: "true"
 runs:
   using: "composite"
   steps:
@@ -24,33 +32,67 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          const imageTag = require('./image_tag');
-          return(imageTag.processNameAndTag({
+          const ImageTag = require('./ImageTag');
+          return(ImageTag.processNameAndTag({
             IMAGE_NAME: `${{ inputs.IMAGE_NAME }}`,
             IMAGE_TAG: `${{ inputs.IMAGE_TAG }}`
           }))
+    - id: clean-old-scan-results
+      run: rm -rf lw-scanner-data
+      shell: bash
     - id: scanimage
+      env:
+        LW_SCANNER_DISABLE_UPDATES: "true"
       uses: docker://lacework/lacework-inline-scanner:0.2.10
       with:
-        args:
-        - version
-    # - uses: actions/upload-artifact@v3
-    #   with:
-    #     name: lacework-scan-results
-    #     path: lw-scan-result.*
-    # - uses: actions/github-script@v6
-    #   with:
-    #     script: |
-    #       //const core = require('@actions/core');
-    #       //const github = require('@actions/github');
-    #       //console.log(context);
-    #       const policy = require('./policy.js');
-    #       let policy_result = policy.result(github);
-          
-    #       await github.rest.issues.createComment({
-    #           issue_number: context.issue.number,
-    #           owner: context.repo.owner,
-    #           repo: context.repo.repo,
-    #           body: policy_result.message
-    #       })
-    #       process.exit(policy_result.code)
+        args: >
+          image evaluate
+          ${{ fromJson(steps.tags.outputs.result).IMAGE_NAME }}
+          ${{ fromJson(steps.tags.outputs.result).IMAGE_TAG}}
+          -w=false --policy --exceptions
+          --data-directory /github/workspace/lw-scanner-data
+          --html --html-file /github/workspace/lw-scan-results.html
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results
+        path: lw-scan-results.*    
+    - uses: actions/upload-artifact@v3
+      with:
+        name: lacework-scan-results-json
+        path: "**/evaluation*.json"
+    - uses: actions/github-script@v6
+      env:
+        FAIL_SEVERITY: ${{ inputs.FAIL_SEVERITY }}
+        FAIL_POLICY: ${{ inputs.FAIL_POLICY }}
+        BLOCKING: ${{ inputs.BLOCKING }}
+      with:
+        script: |
+          const LwScanAnalyzer = require('./LwScanAnalyzer.js');
+
+          // analyze vulnerability data
+          let result;
+          try {
+            result = LwScanAnalyzer.result({
+              github,
+              context,
+              fail_policy:process.env.FAIL_POLICY,
+              fail_severity:process.env.FAIL_SEVERITY,
+              blocking:process.env.BLOCKING=="true"?true:false
+            });
+          } catch(e) {
+            console.log("Error: failed to analyze Lacework scanner results");
+            console.error(e);
+            result = {
+              message: "Failed to analyze Lacework scanner results",
+              code: 1
+            }
+          }
+          if(context.eventName==="pull_request") {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: result.message
+            })
+          }
+          process.exit(result.code)
