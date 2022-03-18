@@ -104,7 +104,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
     result_code=11;
     vuln_fail_reason="Warning: failing due to critical vulnerabilities";
   } else {
-    console.log("vulnerability threshold not configured")
+    console.log("vulnerability threshold not configured",fail_severity)
   }
 
   let message = `
