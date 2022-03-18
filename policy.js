@@ -108,6 +108,7 @@ policy.result = ({github,context,fail_policy,fail_severity}) => {
   } else {
     console.log("vulnerability threshold not met")
   }
+  if(vuln_fail_reason) console.warn("Warning: "+vuln_fail_reason)
 
   let message = `
 # Lacework Scanner
