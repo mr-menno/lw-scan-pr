@@ -82,12 +82,12 @@ runs:
           } catch(e) {
             console.log("Error: failed to analyze Lacework scanner results");
             console.error(e);
-            LwScanAnalyzer = {
+            result = {
               message: "Failed to analyze Lacework scanner results",
               code: 1
             }
           }
-          
+          console.log(github.event_name)
           if(github.event_name==="pull_request") {
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
