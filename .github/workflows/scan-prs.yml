@@ -51,4 +51,4 @@ jobs:
       with:
         IMAGE_TAG: ${{ steps.meta.outputs.tags }}
         FAIL_POLICY: true
-        FAIL_SEVERITY: medium-fixable
+        FAIL_SEVERITY: high-fixable
